@@ -7,6 +7,7 @@ import { StoreModule } from '@ngrx/store'
 
 import { RegisterComponent } from 'src/app/auth/components/register/register.component'
 import { reducers } from 'src/app/auth/store/reducers'
+import { BackendErrorsMessagesModule } from '../shared/modules/backendErrorMessages/backendErrorsMessages.module'
 import { AuthService } from './services/auth.service'
 import { RegisterEffect } from './store/effects/register.effects'
 
@@ -24,6 +25,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     StoreModule.forFeature('auth', reducers),
     EffectsModule.forFeature([RegisterEffect]),
+    BackendErrorsMessagesModule,
   ],
   declarations: [RegisterComponent],
   providers: [AuthService],

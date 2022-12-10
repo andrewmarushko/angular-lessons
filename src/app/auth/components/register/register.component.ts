@@ -3,10 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
 import { AppStateInterface } from 'src/app/shared/types/appState.interface'
-import { CurrentUserInterface } from 'src/app/shared/types/currentUser.interface'
-import { AuthService } from '../../services/auth.service'
+import { BackendErrorsInterface } from 'src/app/shared/types/backendErrors.interface'
 import { registerAction } from '../../store/actions/register.action'
-import { isSubmittingSelector } from '../../store/selectors'
+import {
+  isSubmittingSelector,
+  validationErrorsSelector,
+} from '../../store/selectors'
 import { RegisterRequestInterface } from '../../types/registerRequest.interface'
 
 @Component({
@@ -16,14 +18,14 @@ import { RegisterRequestInterface } from '../../types/registerRequest.interface'
 export class RegisterComponent implements OnInit {
   form: FormGroup = new FormGroup({})
   isSubmitting$: Observable<boolean>
+  backendErrors$: Observable<BackendErrorsInterface | null>
 
   constructor(
     private formGroup: FormBuilder,
-    private store: Store<AppStateInterface>,
-    private authService: AuthService
+    private store: Store<AppStateInterface>
   ) {
     this.isSubmitting$ = this.store.pipe(select(isSubmittingSelector))
-    console.log('stream', this.isSubmitting$)
+    this.backendErrors$ = this.store.pipe(select(validationErrorsSelector))
   }
 
   ngOnInit(): void {
