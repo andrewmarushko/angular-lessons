@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Store } from '@ngrx/store'
+import { select, Store } from '@ngrx/store'
+import { Observable } from 'rxjs'
+import { AppStateInterface } from 'src/app/shared/types/appState.interface'
 import { registerAction } from '../../store/actions/register.action'
+import { isSubmittingSelector } from '../../store/selectors'
 
 @Component({
   selector: 'mc-redister',
@@ -9,8 +12,15 @@ import { registerAction } from '../../store/actions/register.action'
 })
 export class RegisterComponent implements OnInit {
   form: FormGroup = new FormGroup({})
+  isSubmitting$: Observable<boolean>
 
-  constructor(private formGroup: FormBuilder, private store: Store) {}
+  constructor(
+    private formGroup: FormBuilder,
+    private store: Store<AppStateInterface>
+  ) {
+    this.isSubmitting$ = this.store.pipe(select(isSubmittingSelector))
+    console.log('stream', this.isSubmitting$)
+  }
 
   ngOnInit(): void {
     this.initializeFrorm()
