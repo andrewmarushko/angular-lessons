@@ -6,6 +6,11 @@ import {
   registerSuccesAction,
   registerFailureAction,
 } from 'src/app/auth/store/actions/register.action'
+import {
+  loginAction,
+  loginActionFailure,
+  loginActionSuccess,
+} from './actions/login.actions'
 
 const initialState: AuthStateInterface = {
   isSubmitting: false,
@@ -35,6 +40,31 @@ const AuthReducer = createReducer(
   ),
   on(
     registerFailureAction,
+    (state, action): AuthStateInterface => ({
+      ...state,
+      isSubmitting: false,
+      validationErrors: action.errors,
+    })
+  ),
+  on(
+    loginAction,
+    (state): AuthStateInterface => ({
+      ...state,
+      isSubmitting: true,
+    })
+  ),
+  on(
+    loginActionSuccess,
+    (state, action): AuthStateInterface => ({
+      ...state,
+      isSubmitting: false,
+      currentUser: action.currentUser,
+      validationErrors: null,
+      isLoggedIn: true,
+    })
+  ),
+  on(
+    loginActionFailure,
     (state, action): AuthStateInterface => ({
       ...state,
       isSubmitting: false,
